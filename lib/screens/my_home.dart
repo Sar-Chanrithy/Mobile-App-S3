@@ -23,6 +23,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final isDark = ref.watch(themeProvider);
+    final bgImage = ref.watch(backgroundImageProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -36,16 +37,53 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(bgImage),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Theme.of(context).colorScheme.primaryContainer,
+              BlendMode.screen,
             ),
-          ],
+          ),
+        ),
+        child: Center(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+            margin: const EdgeInsets.symmetric(horizontal: 24.0),
+            decoration: BoxDecoration(
+              color: isDark
+                  ? Colors.black.withValues(alpha: 0.7)
+                  : Colors.white.withValues(alpha: 0.85),
+              borderRadius: BorderRadius.circular(16.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.15),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'You have pushed the button this many times:',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  '$_counter',
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -56,4 +94,3 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     );
   }
 }
-

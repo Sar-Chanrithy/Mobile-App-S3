@@ -1,26 +1,25 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class ColorNotifier extends Notifier<int> {
-  static const _key = 'selected_color_index';
+class ColorNotifier extends StateNotifier<int> {
+  ColorNotifier() : super(0) {
+    _load();
+  }
+
+  final _key = "ColorNotifier";
   final _storage = const FlutterSecureStorage();
 
-  @override
-  int build() {
-    _load();
-    return 0;
+  void _load() async {
+    String value = await _storage.read(key: _key) ?? "0";
+    state = int.tryParse(value) ?? 0;
   }
 
-  Future<void> _load() async {
-    final savedIndex = await _storage.read(key: _key) ?? '0';
-    final index = int.tryParse(savedIndex) ?? 0;
+  void changeIndex(int index) {
     state = index;
-  }
-
-  Future<void> changeIndex(int index) async {
-    state = index;
-    await _storage.write(key: _key, value: index.toString());
+    _storage.write(key: _key, value: state.toString());
   }
 }
 
-final colorProvider = NotifierProvider<ColorNotifier, int>(ColorNotifier.new);
+final colorProvider = StateNotifierProvider<ColorNotifier, int>((ref) {
+  return ColorNotifier();
+});

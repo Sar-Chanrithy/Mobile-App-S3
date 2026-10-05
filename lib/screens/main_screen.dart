@@ -98,13 +98,52 @@ class YourFirstScreen extends StatelessWidget {
   }
 }
 
-class YourSecondScreen extends StatelessWidget {
+class YourSecondScreen extends ConsumerWidget {
   const YourSecondScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blue,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bgImage = ref.watch(backgroundImageProvider);
+    final isDark = ref.watch(themeProvider);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Messages'),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(bgImage),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Theme.of(context).colorScheme.primaryContainer,
+              BlendMode.screen,
+            ),
+          ),
+        ),
+        child: Center(
+          child: Container(
+            padding: const EdgeInsets.all(20.0),
+            decoration: BoxDecoration(
+              color: isDark
+                  ? Colors.black.withValues(alpha: 0.7)
+                  : Colors.white.withValues(alpha: 0.85),
+              borderRadius: BorderRadius.circular(16.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.15),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: const Text(
+              'Messages Screen',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

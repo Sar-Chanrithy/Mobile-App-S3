@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'color_provider.dart';
 
 export 'color_provider.dart';
+export 'image_provider.dart';
 
 class ThemeNotifier extends StateNotifier<bool> {
   ThemeNotifier() : super(false) {
