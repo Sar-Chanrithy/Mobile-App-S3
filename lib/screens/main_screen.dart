@@ -1,162 +1,50 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/material.dart';
+import 'meal_screen.dart';
+import 'settings_screen.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-import '../apps/my_app.dart';
-import '../providers/theme_provider.dart';
-import 'my_home.dart';
-import 'setting_screen.dart';
 
-void main() => runApp(
-      const ProviderScope(
-        child: MyApp(),
-      ),
-    );
-
-class PersistenBottomNavBarDemo extends StatelessWidget {
-  const PersistenBottomNavBarDemo({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const ProviderScope(
-      child: MyApp(),
-    );
-  }
-}
-
-class MainScreen extends ConsumerStatefulWidget {
+class MainScreen extends ConsumerWidget {
   const MainScreen({super.key});
 
   @override
-  ConsumerState<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends ConsumerState<MainScreen> {
-  late final PersistentTabController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    // Default to index 2 (Settings tab) as displayed in the screenshot
-    _controller = PersistentTabController(initialIndex: 2);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final themeColor = ref.watch(themeColorProvider);
-
+  Widget build(BuildContext context, WidgetRef ref) {
     return PersistentTabView(
-      controller: _controller,
       tabs: [
         PersistentTabConfig(
-          screen: const MyHomePage(title: 'Home'),
+          screen: const MealScreen(),
           item: ItemConfig(
             icon: const Icon(Icons.home),
             title: "Home",
-          ),
-        ),
+            activeForegroundColor: Theme.of(context).colorScheme.onPrimary,
+            inactiveForegroundColor: Theme.of(context).colorScheme.onPrimary,
+          ), // ItemConfig
+        ), // PersistentTabConfig
         PersistentTabConfig(
-          screen: const YourSecondScreen(),
+          screen: Container(color: Colors.blue),
           item: ItemConfig(
             icon: const Icon(Icons.message),
             title: "Messages",
-          ),
-        ),
+            activeForegroundColor: Theme.of(context).colorScheme.onPrimary,
+            inactiveForegroundColor: Theme.of(context).colorScheme.onPrimary,
+          ), // ItemConfig
+        ), // PersistentTabConfig
         PersistentTabConfig(
           screen: const SettingsScreen(),
           item: ItemConfig(
             icon: const Icon(Icons.settings),
             title: "Settings",
-          ),
-        ),
+            activeForegroundColor: Theme.of(context).colorScheme.onPrimary,
+            inactiveForegroundColor: Theme.of(context).colorScheme.onPrimary,
+          ), // ItemConfig
+        ), // PersistentTabConfig
       ],
       navBarBuilder: (navBarConfig) => Style1BottomNavBar(
         navBarConfig: navBarConfig,
         navBarDecoration: NavBarDecoration(
-          color: themeColor is MaterialColor
-              ? (themeColor[200] ?? themeColor.withValues(alpha: 0.35))
-              : themeColor.withValues(alpha: 0.35),
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
     );
   }
 }
-
-class YourFirstScreen extends StatelessWidget {
-  const YourFirstScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.red,
-    );
-  }
-}
-
-class YourSecondScreen extends ConsumerWidget {
-  const YourSecondScreen({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final bgImage = ref.watch(backgroundImageProvider);
-    final isDark = ref.watch(themeProvider);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Messages'),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(bgImage),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Theme.of(context).colorScheme.primaryContainer,
-              BlendMode.screen,
-            ),
-          ),
-        ),
-        child: Center(
-          child: Container(
-            padding: const EdgeInsets.all(20.0),
-            decoration: BoxDecoration(
-              color: isDark
-                  ? Colors.black.withValues(alpha: 0.7)
-                  : Colors.white.withValues(alpha: 0.85),
-              borderRadius: BorderRadius.circular(16.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.15),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: const Text(
-              'Messages Screen',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class YourThirdScreen extends ConsumerWidget {
-  const YourThirdScreen({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return const SettingsScreen();
-  }
-}
-
-typedef FirstScreen = YourFirstScreen;
-typedef SecondScreen = YourSecondScreen;
-typedef ThirdScreen = YourThirdScreen;

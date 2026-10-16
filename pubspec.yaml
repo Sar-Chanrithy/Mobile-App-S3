@@ -37,6 +37,7 @@ dependencies:
   flutter_riverpod: ^2.5.1
   flutter_secure_storage: ^10.3.4
   persistent_bottom_nav_bar_v2: ^5.3.0
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/theme_provider.dart';
+import '../screens/detail_screen.dart';
 import '../screens/main_screen.dart';
 
 class MyApp extends ConsumerWidget {
@@ -41,7 +42,28 @@ class MyApp extends ConsumerWidget {
           foregroundColor: Colors.white,
         ),
       ),
-      home: const MainScreen(),
+      // home: const MainScreen(),
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case "/":
+            return MaterialPageRoute(
+              builder: (context) => const MainScreen(),
+            );
+          case "/detail":
+            return MaterialPageRoute(
+              builder: (context) => const DetailScreen(),
+              settings: settings,
+            );
+          default:
+            return MaterialPageRoute(
+              builder: (context) => const Scaffold(
+                body: Center(
+                  child: Text("No Screen Found"),
+                ),
+              ),
+            );
+        }
+      },
     );
   }
 }
